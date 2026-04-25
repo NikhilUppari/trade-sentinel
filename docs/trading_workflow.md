@@ -34,6 +34,12 @@ Dry-run execution:
 trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000 --execute --mode dry-run
 ```
 
+HTML dashboard:
+
+```bash
+trade-sentinel dashboard --watchlist examples/watchlist.yaml --cash 10000
+```
+
 Paper broker execution:
 
 ```bash

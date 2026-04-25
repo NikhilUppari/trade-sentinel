@@ -51,6 +51,28 @@ trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000 --ex
 
 This is the safest way to verify the full trading workflow.
 
+## HTML Dashboard
+
+Generate a standalone dashboard that opens in any browser:
+
+```bash
+trade-sentinel dashboard --watchlist examples/watchlist.yaml --cash 10000
+```
+
+By default, the file is written to:
+
+```text
+reports/trade_sentinel_dashboard.html
+```
+
+You can choose a custom path:
+
+```bash
+trade-sentinel dashboard --watchlist examples/watchlist.yaml --cash 10000 --output reports/my_report.html
+```
+
+The dashboard includes summary metrics, research signals, and the current order plan. Generated reports are ignored by Git through the `reports/` folder.
+
 ## Paper Broker Execution
 
 The project includes an Alpaca-compatible broker adapter for paper trading.

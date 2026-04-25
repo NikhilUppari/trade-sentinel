@@ -51,6 +51,12 @@ Dry-run the planned orders without sending anything to a broker:
 trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000 --execute --mode dry-run
 ```
 
+Generate a browser-viewable dashboard:
+
+```bash
+trade-sentinel dashboard --watchlist examples/watchlist.yaml --cash 10000
+```
+
 Run tests:
 
 ```bash
@@ -101,6 +107,7 @@ The LLM layer is intentionally optional. The scoring engine works from market da
 
 - `analyze`: produces research signals only.
 - `plan-trades`: creates order tickets from bullish signals that pass risk rules.
+- `dashboard`: writes a standalone HTML report with signals and order tickets.
 - `--execute --mode dry-run`: simulates execution locally and sends no broker orders.
 - `--execute --mode paper`: submits to a paper broker when broker credentials are configured.
 
