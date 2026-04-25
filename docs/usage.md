@@ -5,13 +5,7 @@
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
-pip install -e ".[market,ai,ui,dev]"
-```
-
-If you only want to run the offline demo:
-
-```bash
-pip install -e .
+pip install -e ".[ai,ui,dev]"
 ```
 
 ## Analyze a Watchlist
@@ -20,11 +14,75 @@ pip install -e .
 trade-sentinel analyze --watchlist examples/watchlist.yaml --cash 10000
 ```
 
-## Offline Demo
+This command pulls recent market data from Yahoo Finance through `yfinance`.
+
+Free market-data APIs may be delayed, rate limited, or occasionally unavailable. Treat the report as research input, not a live trading signal.
+
+## Plan Trades
+
+After analyzing the watchlist, Trade Sentinel can convert bullish signals into risk-checked order tickets:
 
 ```bash
-trade-sentinel analyze --watchlist examples/watchlist.yaml --offline
+trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000
 ```
+
+The order planner only creates buy tickets when:
+
+- The signal is `bullish`.
+- The score is at or above `--min-trade-score`.
+- The allocation passes max-position and max-order-value rules.
+- The account cash value can support the planned ticket.
+
+Useful options:
+
+```bash
+trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000 --min-trade-score 80
+trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000 --max-order-value 500
+trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000 --whole-shares
+```
+
+## Dry-Run Execution
+
+Dry-run execution prints what would be submitted, but sends no orders to a broker:
+
+```bash
+trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000 --execute --mode dry-run
+```
+
+This is the safest way to verify the full trading workflow.
+
+## Paper Broker Execution
+
+The project includes an Alpaca-compatible broker adapter for paper trading.
+
+Set credentials:
+
+```bash
+$env:ALPACA_API_KEY="your-paper-key"
+$env:ALPACA_SECRET_KEY="your-paper-secret"
+$env:ALPACA_BASE_URL="https://paper-api.alpaca.markets"
+```
+
+Then run:
+
+```bash
+trade-sentinel plan-trades --watchlist examples/watchlist.yaml --cash 10000 --execute --mode paper
+```
+
+Live execution is intentionally blocked from the CLI. That guard is there because real-money execution should only be enabled after paper trading, backtesting, account-position checks, and manual review are added.
+
+## Why Use a Watchlist?
+
+The current version analyzes a watchlist because it keeps the research universe explicit. You decide which stocks or ETFs are worth studying, then Trade Sentinel scores them with the same trend, momentum, volatility, and allocation rules.
+
+That makes the first version easier to understand:
+
+- The input is visible in `examples/watchlist.yaml`.
+- Every ticker in the report has a reason for being there.
+- The agent does not silently scan thousands of low-quality or illiquid tickers.
+- Results are easier to compare across multiple runs.
+
+The next natural feature is a discovery command that builds a watchlist automatically from a larger universe. For example, it could scan S&P 500 names, remove low-volume stocks, filter for positive momentum, and then send the survivors into the same analysis engine.
 
 ## Optional AI Commentary
 

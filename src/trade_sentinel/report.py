@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from trade_sentinel.models import PortfolioRules, SignalResult
+from trade_sentinel.models import ExecutionResult, OrderTicket, PortfolioRules, SignalResult
 
 
 def render_report(results: list[SignalResult], rules: PortfolioRules, ai_commentary: str | None = None) -> None:
@@ -65,3 +65,33 @@ def _render_rich_report(
         console.print()
         console.print("[bold]AI Commentary[/bold]")
         console.print(ai_commentary)
+
+
+def render_order_plan(tickets: list[OrderTicket]) -> None:
+    if not tickets:
+        print("No order tickets passed the current signal and risk rules.")
+        return
+
+    print("Trade Sentinel Order Plan")
+    print()
+    for ticket in tickets:
+        print(
+            f"{ticket.side.upper():4} {ticket.symbol:6} qty={ticket.quantity} "
+            f"type={ticket.order_type} tif={ticket.time_in_force} "
+            f"est_price=${ticket.estimated_price:,.2f} est_value=${ticket.estimated_value:,.2f}"
+        )
+        print(f"  Reason: {ticket.reason}")
+
+
+def render_execution_results(results: list[ExecutionResult]) -> None:
+    if not results:
+        return
+
+    print()
+    print("Execution Results")
+    for result in results:
+        ticket = result.ticket
+        print(
+            f"{result.mode:7} {result.status:9} {ticket.side.upper()} {ticket.symbol} "
+            f"qty={ticket.quantity}: {result.message}"
+        )

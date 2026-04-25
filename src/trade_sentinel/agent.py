@@ -8,14 +8,13 @@ from trade_sentinel.strategy import analyze_stock
 
 
 class TradingResearchAgent:
-    def __init__(self, rules: PortfolioRules, offline: bool = False):
+    def __init__(self, rules: PortfolioRules):
         self.rules = rules
-        self.offline = offline
 
     def analyze(self, watchlist: list[WatchlistItem]) -> list[SignalResult]:
         results: list[SignalResult] = []
         for item in watchlist:
-            snapshot = fetch_snapshot(item.symbol, offline=self.offline)
+            snapshot = fetch_snapshot(item.symbol)
             results.append(analyze_stock(item, snapshot, self.rules))
         return sorted(results, key=lambda result: result.score, reverse=True)
 
