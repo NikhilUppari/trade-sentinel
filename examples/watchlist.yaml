@@ -1,0 +1,16 @@
+watchlist:
+  - symbol: MSFT
+    thesis: High-quality cloud and AI infrastructure compounder.
+    max_allocation_pct: 0.12
+  - symbol: GOOGL
+    thesis: Search, ads, cloud, and AI platform exposure.
+    max_allocation_pct: 0.10
+  - symbol: NVDA
+    thesis: AI accelerator leader with higher valuation risk.
+    max_allocation_pct: 0.08
+  - symbol: AMZN
+    thesis: AWS plus retail operating leverage.
+    max_allocation_pct: 0.10
+  - symbol: VOO
+    thesis: Broad-market core holding.
+    max_allocation_pct: 0.20
